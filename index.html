@@ -2,41 +2,83 @@
 <html>
 <head>
     <title>Doboz Tartalom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        ul { list-style-type: none; padding: 0; }
-        li { margin: 5px 0; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background: white;
+            color: black;
+            line-height: 1.4;
+        }
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #d00;  /* Vörös szín, mint a tűzoltós matricákon */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1.1rem;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1 id="doboz-id"></h1>
-    <ul id="tartalom"></ul>
+    <div class="container">
+        <h1>DOBOZ TARTALMA</h1>
+        <ul id="tartalom"></ul>
+    </div>
 
     <script>
-        // URL-ből kiolvassa a doboz ID-t (pl. ?id=DOB-001)
+        // URL paraméterből kiolvassuk a doboz azonosítóját
         const urlParams = new URLSearchParams(window.location.search);
         const dobozId = urlParams.get('id');
 
-        // Adatbázis (lehet JSON fájl is)
+        // Dobozok tartalma (itt módosítsd a saját adataidat)
         const adatok = {
-            "DOB-001": ["Régi könyvek", "DVD-k (Star Wars)", "Fotóalbum"],
-            "DOB-002": ["Karácsonyi díszek", "LED fények"],
-            "DOB-003": ["Elektronikai alkatrészek", "USB kábelek"]
+            "Kéziszerszámok": ["12 fogas bitfej készlet",
+                       "Ablaktörlő leszedő",
+                       "Bitfej átalakító",
+                       "Csaptelep szorító",
+                       "Csavarfej kihajtó",
+                       "Festékréteg mérő",
+                       "Fúróprofil",
+                       "Kinyomó pisztoly",
+                       "Körkivágó",
+                       "Olajpumpa leszedő",
+                       "Ragszalaghúzó",
+                       "Refraktométer",
+                       "Övlukasztó"],
+            "Konyha": ["Kés", "Lábos", "Főzőkanál", "Mérleg"],
+            "Télidísz": ["LED fényfüzér", "Girland", "Tűzoltó készülék"]
         };
 
-        // Megjelenítés
-        document.getElementById("doboz-id").textContent = `Doboz: ${dobozId}`;
+        // Tartalom ABC sorrendbe rendezése és megjelenítése
         const tartalomLista = document.getElementById("tartalom");
 
-        if (adatok[dobozId]) {
-            adatok[dobozId].forEach(item => {
+        if (dobozId && adatok[dobozId]) {
+            // ABC sorrendbe rendezés
+            const rendezettTartalom = [...adatok[dobozId]].sort((a, b) => a.localeCompare(b));
+            
+            // Megjelenítés
+            rendezettTartalom.forEach(item => {
                 const li = document.createElement("li");
-                li.textContent = `- ${item}`;
+                li.textContent = `• ${item}`;  // Pontozott lista
                 tartalomLista.appendChild(li);
             });
         } else {
-            tartalomLista.innerHTML = "<li>Nincs ilyen doboz!</li>";
+            tartalomLista.innerHTML = "<li>Nincs ilyen doboz azonosító!</li>";
         }
     </script>
 </body>
