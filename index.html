@@ -15,7 +15,9 @@
             font-size: 1.5rem;
             text-align: center;
             margin-bottom: 1rem;
-            color: #d00;  /* Vörös szín, mint a tűzoltós matricákon */
+            color: #d00;
+            text-transform: uppercase;
+            font-weight: bold;
         }
         ul {
             list-style-type: none;
@@ -27,60 +29,70 @@
             border-bottom: 1px solid #eee;
             font-size: 1.1rem;
         }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>DOBOZ TARTALMA</h1>
+        <h1 id="doboz-cim"></h1>
         <ul id="tartalom"></ul>
     </div>
 
     <script>
-        // URL paraméterből kiolvassuk a doboz azonosítóját
+        // Dobozok adatbázisa
+        const dobozAdatok = {
+            // Belső ID-k (URL-ben használt rövid formák)
+            "keziszerszamok": {
+                nev: "KÉZISZERSZÁMOK",
+                tartalom: [
+                    "12 fogas bitfej készlet",
+                    "Ablaktörlő leszedő",
+                    "Bitfej átalakító",
+                    "Csaptelep szorító",
+                    "Csavarfej kihajtó",
+                    "Festékréteg mérő",
+                    "Fúróprofil",
+                    "Kinyomó pisztoly",
+                    "Körkivágó",
+                    "Olajpumpa leszedő",
+                    "Ragszalaghúzó",
+                    "Refraktométer",
+                    "Övlukasztó"
+                ]
+            },
+            "konyha": {
+                nev: "KONYHA ESZKÖZÖK",
+                tartalom: ["Főzőkanál", "Kés", "Mérleg", "Lábos"]
+            },
+            "teli": {
+                nev: "TÉLI DÍSZÍTÉSEK",
+                tartalom: ["LED fényfüzér", "Girland", "Hópihe"]
+            }
+        };
+
+        // URL-ből kiolvassuk a doboz belső ID-ját
         const urlParams = new URLSearchParams(window.location.search);
         const dobozId = urlParams.get('id');
 
-        // Dobozok tartalma (itt módosítsd a saját adataidat)
-        const adatok = {
-            "Kéziszerszámok": [
-                       "12 fogas bitfej készlet",
-                       "Ablaktörlő leszedő",
-                       "Bitfej átalakító",
-                       "Csaptelep szorító",
-                       "Csavarfej kihajtó",
-                       "Festékréteg mérő",
-                       "Fúróprofil",
-                       "Kinyomó pisztoly",
-                       "Körkivágó",
-                       "Olajpumpa leszedő",
-                       "Ragszalaghúzó",
-                       "Refraktométer",
-                       "Övlukasztó"
-                              ],
-            "DOB-001": ["Kés", "Lábos", "Főzőkanál", "Mérleg"],
-            "Télidísz": ["LED fényfüzér", "Girland", "Tűzoltó készülék"]
-        };
-
-        // Tartalom ABC sorrendbe rendezése és megjelenítése
+        // Tartalom megjelenítése
+        const cimElem = document.getElementById("doboz-cim");
         const tartalomLista = document.getElementById("tartalom");
 
-        if (dobozId && adatok[dobozId]) {
-            // ABC sorrendbe rendezés
-            const rendezettTartalom = [...adatok[dobozId]].sort((a, b) => a.localeCompare(b));
+        if (dobozId && dobozAdatok[dobozId]) {
+            // Cím beállítása
+            cimElem.textContent = dobozAdatok[dobozId].nev;
+            
+            // Tartalom ABC sorrendben
+            const rendezettTartalom = [...dobozAdatok[dobozId].tartalom].sort();
             
             // Megjelenítés
             rendezettTartalom.forEach(item => {
                 const li = document.createElement("li");
-                li.textContent = `• ${item}`;  // Pontozott lista
+                li.textContent = `• ${item}`;
                 tartalomLista.appendChild(li);
             });
         } else {
-            tartalomLista.innerHTML = "<li>Nincs ilyen doboz azonosító!</li>";
+            cimElem.textContent = "HIBA";
+            tartalomLista.innerHTML = "<li>Nem található a doboz!</li>";
         }
     </script>
 </body>
