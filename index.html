@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doboz Tartalom</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1 id="doboz-id"></h1>
+    <ul id="tartalom"></ul>
+
+    <script>
+        // URL-ből kiolvassa a doboz ID-t (pl. ?id=DOB-001)
+        const urlParams = new URLSearchParams(window.location.search);
+        const dobozId = urlParams.get('id');
+
+        // Adatbázis (lehet JSON fájl is)
+        const adatok = {
+            "DOB-001": ["Régi könyvek", "DVD-k (Star Wars)", "Fotóalbum"],
+            "DOB-002": ["Karácsonyi díszek", "LED fények"],
+            "DOB-003": ["Elektronikai alkatrészek", "USB kábelek"]
+        };
+
+        // Megjelenítés
+        document.getElementById("doboz-id").textContent = `Doboz: ${dobozId}`;
+        const tartalomLista = document.getElementById("tartalom");
+
+        if (adatok[dobozId]) {
+            adatok[dobozId].forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `- ${item}`;
+                tartalomLista.appendChild(li);
+            });
+        } else {
+            tartalomLista.innerHTML = "<li>Nincs ilyen doboz!</li>";
+        }
+    </script>
+</body>
+</html>
